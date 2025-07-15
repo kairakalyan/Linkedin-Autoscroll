@@ -1,0 +1,32 @@
+const autoExpandObserver = new MutationObserver(() => {
+  // Expand all "...more" buttons in posts or job descriptions
+  document.querySelectorAll('button.feed-shared-inline-show-more-text__see-more-less-toggle')
+    .forEach(btn => btn.click());
+
+  // Auto-click "Show more results" or similar buttons
+  const buttons = [
+    'button[aria-label="Show more results"]',
+    'button[aria-label="Load more results"]',
+    'button[aria-label="See more results"]',
+    'button.artdeco-button--secondary'
+  ];
+
+  buttons.forEach(selector => {
+    const btn = document.querySelector(selector);
+    if (btn && btn.offsetParent !== null) {
+      btn.click();
+    }
+  });
+});
+
+// Start observing DOM changes as you scroll manually
+autoExpandObserver.observe(document.body, {
+  childList: true,
+  subtree: true,
+});
+
+// Add stop function for later use
+window.stopAutoExpand = () => {
+  autoExpandObserver.disconnect();
+  console.log('✅ Auto-expand stopped.');
+};
